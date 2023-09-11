@@ -22,10 +22,6 @@ def download_file(download_folder, file_url, username=None, password=None):
         local_file_size = 0
 
     while local_file_size < file_size:
-        if os.path.exists(file_path):
-            local_file_size = os.path.getsize(file_path)
-        else:
-            local_file_size = 0
         if local_file_size != 0:
             print(f'Downloading missing {100-round((local_file_size/file_size)*100, 2)}% of {filename}')
         header = {'Range': f'bytes={local_file_size}-'}
@@ -46,6 +42,11 @@ def download_file(download_folder, file_url, username=None, password=None):
                 if chunk:  # filter out keep-alive new chunks
                     file.write(chunk)
                     bar.update(len(chunk))
+
+        if os.path.exists(file_path):
+            local_file_size = os.path.getsize(file_path)
+        else:
+            local_file_size = 0
 
 
 # Example usage
